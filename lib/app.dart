@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/injection_container.dart';
-import 'core/theme/app_text_styles.dart';
 import 'core/theme/app_theme.dart';
-import 'domain/entities/user.dart';
 import 'presentation/auth/bloc/auth_bloc.dart';
 import 'presentation/auth/bloc/auth_event.dart';
 import 'presentation/auth/bloc/auth_state.dart';
 import 'presentation/auth/view/login_page.dart';
+import 'presentation/dashboard/bloc/posts_bloc.dart';
+import 'presentation/dashboard/bloc/posts_event.dart';
+import 'presentation/main/view/main_shell.dart';
 
 class PostsApp extends StatelessWidget {
   const PostsApp({super.key});
@@ -54,37 +55,13 @@ class _AuthGateState extends State<_AuthGate> {
           );
         }
         if (state is AuthAuthenticated) {
-          return _PlaceholderHomePage(user: state.user);
+          return BlocProvider(
+            create: (_) => sl<PostsBloc>()..add(const PostsStarted()),
+            child: const MainShell(),
+          );
         }
         return const LoginPage();
       },
-    );
-  }
-}
-
-class _PlaceholderHomePage extends StatelessWidget {
-  const _PlaceholderHomePage({required this.user});
-
-  final User user;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Posts App')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Welcome, ${user.displayName}', style: AppTextStyles.title),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () =>
-                  context.read<AuthBloc>().add(const AuthLogoutRequested()),
-              child: const Text('Log out'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

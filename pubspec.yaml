@@ -51,6 +51,10 @@ dependencies:
   # SVG icon rendering
   flutter_svg: ^2.0.10+1
 
+  # Search debounce + restartable event handling for PostsBloc
+  bloc_concurrency: ^0.3.0
+  stream_transform: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
